@@ -21,6 +21,7 @@ public enum BaseResponseStatus {
     UNAUTHORIZED(false, 2012, "권한이 없는 유저의 접근입니다."),
     EXIST_NICKNAME(false,2021,"이미 존재하는 닉네임 입니다."),
     EXIST_MEMBER_ID(false,2022,"이미 존재하는 유저 아이디 입니다."),
+    NOT_EXIST_ID_OR_PASSWORD(false,2023,"아이디 또는 비밀번호를 잘못 입력했습니다"),
     /**
      * 500 :  Database, Server 오류
      */
