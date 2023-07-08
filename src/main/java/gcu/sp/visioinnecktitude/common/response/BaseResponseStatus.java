@@ -15,44 +15,12 @@ public enum BaseResponseStatus {
 
 
     /**
-     * 400 : Request, Response 오류
+     * 2000 : Request, Response 오류
      */
 
-    USERS_EMPTY_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "이메일을 입력해주세요."),
-    TEST_EMPTY_COMMENT(false, HttpStatus.BAD_REQUEST.value(), "코멘트를 입력해주세요."),
-    POST_USERS_INVALID_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "이메일 형식을 확인해주세요."),
-    POST_USERS_EXISTS_EMAIL(false,HttpStatus.BAD_REQUEST.value(),"중복된 이메일입니다."),
-    POST_TEST_EXISTS_MEMO(false,HttpStatus.BAD_REQUEST.value(),"중복된 메모입니다."),
-
-    RESPONSE_ERROR(false, HttpStatus.NOT_FOUND.value(), "값을 불러오는데 실패하였습니다."),
-
-    DUPLICATED_EMAIL(false, HttpStatus.BAD_REQUEST.value(), "중복된 이메일입니다."),
-    INVALID_MEMO(false,HttpStatus.NOT_FOUND.value(), "존재하지 않는 메모입니다."),
-    FAILED_TO_LOGIN(false,HttpStatus.NOT_FOUND.value(),"없는 아이디거나 비밀번호가 틀렸습니다."),
-    EMPTY_JWT(false, 402, "JWT를 입력해주세요."),
-    INVALID_JWT(false, 401, "유효하지 않은 JWT입니다."),
-    INVALID_USER_JWT(false,HttpStatus.FORBIDDEN.value(),"권한이 없는 유저의 접근입니다."),
-    NOT_FIND_USER(false,410,"유저를 찾을 수 없습니다."),
-    INVALID_OAUTH_TYPE(false, HttpStatus.BAD_REQUEST.value(), "알 수 없는 소셜 로그인 형식입니다."),
-    //피드 430
-    OVER_IMAGE(false,432,"이미지는 최대 10개까지 입니다."),
-    TEXT_LENGTH_ERROR(false, 433, "피드는 1자 이상 2200자 이하입니다."),
-    NOT_USER_FEED(false,431,"유저의 피드가 아닙니다."),
-    NOT_FIND_FEED(false,430, "피드를 찾을 수 없습니다."),
-    //댓글 450
-    NOT_FIND_COMMENT(false,450, "댓글을 찾을 수 없습니다."),
-    NOT_USER_COMMENT(false,453,"유저의 댓글이 아닙니다."),
-    COMMENT_LENGTH_ERROR(false, 454, "댓글은 1자 이상 220자 이하입니다."),
-    //Blame
-    NOT_FIND_BLAME(false,470, "신고내역을 찾을 수 없습니다."),
-    //관리자 490
-    NOT_ADMIN(false,490,"관리자가 아닙니다."),
-    NOT_EXIST_PAGE(false,411,"페이지가 존재하지않습니다."),
-    INVALID_PAGE_SIZE(false,412,"올바른 페이지 사이즈가 아닙니다."),
-    INVALID_STATE(false,413,"유효한 상태값이 아닙니다."),
-    INVALID_BLAME_CONTENT(false,414,"올바른 신고 내용이 아닙니다."),
-    INVALID_DATE(false,415,"올바른 날자 형식이 아닙니다."),
-    INVALID_ACTION(false, 416,"올바른 action이 아닙니다." ),
+    UNAUTHORIZED(false, 2012, "권한이 없는 유저의 접근입니다."),
+    EXIST_NICKNAME(false,2021,"이미 존재하는 닉네임 입니다."),
+    EXIST_MEMBER_ID(false,2022,"이미 존재하는 유저 아이디 입니다."),
     /**
      * 500 :  Database, Server 오류
      */
