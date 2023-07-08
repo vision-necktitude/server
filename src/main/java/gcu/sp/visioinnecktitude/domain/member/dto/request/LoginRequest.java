@@ -10,12 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateMemberRequest {
-    @Schema(description = "닉네임", example = "dongseok")
-    private String nickname;
+public class LoginRequest {
     @Schema(description = "아이디", example = "dsk0820")
     private String id;
     @Schema(description = "비밀번호", example = "1234")
     private String password;
-
 }
