@@ -15,6 +15,6 @@ public class CreateMemberRequest {
     String nickname;
     @Schema(description = "아이디", example = "dsk0820")
     String id;
-    @Schema(description = "아이디", example = "dsk0820")
+    @Schema(description = "비밀번호", example = "1234")
     String password;
 }
