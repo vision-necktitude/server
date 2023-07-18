@@ -4,6 +4,7 @@ import gcu.sp.visioinnecktitude.common.config.security.jwt.JwtTokenProvider;
 import gcu.sp.visioinnecktitude.common.response.BaseResponse;
 import gcu.sp.visioinnecktitude.common.response.BaseResponseStatus;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.CreateMemberRequest;
+import gcu.sp.visioinnecktitude.domain.member.dto.request.DuplicateNameRequest;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.LoginRequest;
 import gcu.sp.visioinnecktitude.domain.member.dto.response.LogInResponse;
 import gcu.sp.visioinnecktitude.domain.member.service.MemberService;
@@ -55,7 +56,21 @@ public class MemberController {
 
         Long memberId = memberService.loginMember(loginRequest);
         LogInResponse logInResponse = new LogInResponse(jwtTokenProvider.createAccessToken(Long.toString(memberId)));
-        return ResponseEntity.status(HttpStatus.CREATED).body(new BaseResponse<>(logInResponse));
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(logInResponse));
+    }
+
+    @PostMapping(value = "/duplicate/name")
+    @Operation(summary = "이름 중복체크 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "409", description = "중복된 이름입니다.", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류입니다.", content = @Content)
+    })
+    public ResponseEntity<BaseResponse<LogInResponse>> isValidName(@RequestBody DuplicateNameRequest duplicateNameRequest) {
+
+        if(memberService.isValidName(duplicateNameRequest))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new BaseResponse<>(BaseResponseStatus.EXIST_NICKNAME));
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(BaseResponseStatus.SUCCESS));
     }
 
 }

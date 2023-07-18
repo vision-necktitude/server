@@ -2,6 +2,7 @@ package gcu.sp.visioinnecktitude.domain.member.service;
 
 import gcu.sp.visioinnecktitude.common.exceptions.BaseException;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.CreateMemberRequest;
+import gcu.sp.visioinnecktitude.domain.member.dto.request.DuplicateNameRequest;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.LoginRequest;
 import gcu.sp.visioinnecktitude.domain.member.entity.Member;
 import gcu.sp.visioinnecktitude.domain.member.entity.PasswordLogin;
@@ -55,6 +56,11 @@ public class MemberServiceImpl implements MemberService {
         if (!checkPassword(loginRequest.getPassword(), passwordLogin.getPassword()))
             throw new BaseException(NOT_EXIST_ID_OR_PASSWORD);
         return passwordLogin.getMember().getId();
+    }
+
+    @Override
+    public boolean isValidName(DuplicateNameRequest duplicateNameRequest) {
+        return checkDuplicateName(duplicateNameRequest.getName());
     }
 
     public boolean checkDuplicateName(String name) {
