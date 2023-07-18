@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class MemberController {
             @ApiResponse(responseCode = "2022", description = "이미 존재하는 유저 아이디 입니다.", content = @Content),
             @ApiResponse(responseCode = "4001", description = "서버 오류입니다.", content = @Content)
     })
-    public ResponseEntity<BaseResponse<String>> signup(@RequestBody CreateMemberRequest createMemberRequest) {
+    public ResponseEntity<BaseResponse<String>> signup(@Valid @RequestBody CreateMemberRequest createMemberRequest) {
         memberService.createMember(createMemberRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new BaseResponse<>(BaseResponseStatus.SUCCESS));
     }
