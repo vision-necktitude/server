@@ -4,13 +4,18 @@ import gcu.sp.visioinnecktitude.common.exceptions.BaseException;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.CreateMemberRequest;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.LoginRequest;
 import gcu.sp.visioinnecktitude.domain.member.entity.Member;
+import gcu.sp.visioinnecktitude.domain.member.entity.PasswordLogin;
 import gcu.sp.visioinnecktitude.domain.member.repository.MemberRepository;
+import gcu.sp.visioinnecktitude.domain.member.repository.PasswordLoginRepository;
 import gcu.sp.visioinnecktitude.domain.member.vo.State;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static gcu.sp.visioinnecktitude.common.response.BaseResponseStatus.*;
 
@@ -21,16 +26,22 @@ import static gcu.sp.visioinnecktitude.common.response.BaseResponseStatus.*;
 public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final PasswordLoginRepository passwordLoginRepository;
 
     @Transactional
     @Override
     public void createMember(CreateMemberRequest createMemberRequest) {
         Member member = Member.builder()
-                .memberId(createMemberRequest.getId())
-                .nickname(createMemberRequest.getNickname())
-                .password(passwordEncode(createMemberRequest.getPassword()))
+                .name(createMemberRequest.getName())
+                .sex(createMemberRequest.getSex())
+                .birthday(LocalDate.parse(createMemberRequest.getBirthday()))
                 .build();
-        if (checkDuplicateNickname(createMemberRequest.getNickname()))
+        PasswordLogin passwordLogin = PasswordLogin.builder()
+                .password(createMemberRequest.getPassword())
+                .loginId(createMemberRequest.getId())
+                .build();
+        member.setPasswordLogin(passwordLogin);
+        if (checkDuplicateName(createMemberRequest.getName()))
             throw new BaseException(EXIST_NICKNAME);
         if (checkDuplicateId(createMemberRequest.getId()))
             throw new BaseException(EXIST_MEMBER_ID);
@@ -39,25 +50,22 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long loginMember(LoginRequest loginRequest) {
-        Member member = memberRepository.findByMemberIdAndState(loginRequest.getId(), State.A).orElseThrow(()->new BaseException(NOT_EXIST_ID_OR_PASSWORD));
+        PasswordLogin passwordLogin = passwordLoginRepository.findByLoginIdAndState(loginRequest.getId(), State.A).orElseThrow(() -> new BaseException(NOT_EXIST_ID_OR_PASSWORD));
         //비밀번호가 다를 경우 throw
-        if(!checkPassword(loginRequest.getPassword(),member.getPassword()))
+        if (!checkPassword(loginRequest.getPassword(), passwordLogin.getPassword()))
             throw new BaseException(NOT_EXIST_ID_OR_PASSWORD);
-        return member.getId();
+        return passwordLogin.getMember().getId();
     }
 
-    public boolean checkDuplicateNickname(String nickname) {
-        return memberRepository.existsByNickname(nickname);
+    public boolean checkDuplicateName(String name) {
+        return memberRepository.existsByName(name);
     }
 
     public boolean checkDuplicateId(String id) {
-        return memberRepository.existsByMemberId(id);
+        return passwordLoginRepository.existsByLoginId(id);
     }
 
-    public String passwordEncode(String password) {
-        return passwordEncoder.encode(password);
-    }
-    public boolean checkPassword(String password1, String password2){
-        return passwordEncoder.matches(password1,password2);
+    public boolean checkPassword(String password1, String password2) {
+        return passwordEncoder.matches(password1, password2);
     }
 }

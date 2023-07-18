@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "유저")
 @RequestMapping(value = "/member")
 public class MemberController {
+
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -57,4 +58,5 @@ public class MemberController {
         LogInResponse logInResponse = new LogInResponse(jwtTokenProvider.createAccessToken(Long.toString(memberId)));
         return ResponseEntity.status(HttpStatus.CREATED).body(new BaseResponse<>(logInResponse));
     }
+
 }
