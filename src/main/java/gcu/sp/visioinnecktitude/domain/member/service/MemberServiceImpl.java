@@ -37,7 +37,7 @@ public class MemberServiceImpl implements MemberService {
                 .birthday(LocalDate.parse(createMemberRequest.getBirthday()))
                 .build();
         PasswordLogin passwordLogin = PasswordLogin.builder()
-                .password(createMemberRequest.getPassword())
+                .password(passwordEncode(createMemberRequest.getPassword()))
                 .loginId(createMemberRequest.getId())
                 .build();
         member.setPasswordLogin(passwordLogin);
@@ -67,5 +67,8 @@ public class MemberServiceImpl implements MemberService {
 
     public boolean checkPassword(String password1, String password2) {
         return passwordEncoder.matches(password1, password2);
+    }
+    public String passwordEncode(String password) {
+        return passwordEncoder.encode(password);
     }
 }
