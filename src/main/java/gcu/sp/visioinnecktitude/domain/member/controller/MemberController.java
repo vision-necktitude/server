@@ -35,10 +35,9 @@ public class MemberController {
     @PostMapping(value = "/signup")
     @Operation(summary = "회원가입 API")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "1000", description = "성공"),
-            @ApiResponse(responseCode = "2021", description = "이미 존재하는 닉네임 입니다.", content = @Content),
-            @ApiResponse(responseCode = "2022", description = "이미 존재하는 유저 아이디 입니다.", content = @Content),
-            @ApiResponse(responseCode = "4001", description = "서버 오류입니다.", content = @Content)
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "409", description = "이미 존재하는 닉네임 입니다. \t\n \t\n이미 존재하는 유저 아이디 입니다.", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류입니다.", content = @Content)
     })
     public ResponseEntity<BaseResponse<String>> signup(@Valid @RequestBody CreateMemberRequest createMemberRequest) {
         memberService.createMember(createMemberRequest);
@@ -48,10 +47,9 @@ public class MemberController {
     @PostMapping(value = "/login")
     @Operation(summary = "로그인 API")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "1000", description = "성공"),
-            @ApiResponse(responseCode = "2021", description = "이미 존재하는 닉네임 입니다.", content = @Content),
-            @ApiResponse(responseCode = "2022", description = "이미 존재하는 유저 아이디 입니다.", content = @Content),
-            @ApiResponse(responseCode = "4001", description = "서버 오류입니다.", content = @Content)
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "409", description = "아이디 또는 비밀번호를 잘못 입력했습니다.", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류입니다.", content = @Content)
     })
     public ResponseEntity<BaseResponse<LogInResponse>> login(@RequestBody LoginRequest loginRequest) {
 
