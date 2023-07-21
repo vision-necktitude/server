@@ -6,6 +6,7 @@ import gcu.sp.visioinnecktitude.common.response.BaseResponseStatus;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.CreateMemberRequest;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.DuplicateNameRequest;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.LoginRequest;
+import gcu.sp.visioinnecktitude.domain.member.dto.request.ModifyNameRequest;
 import gcu.sp.visioinnecktitude.domain.member.dto.response.LogInResponse;
 import gcu.sp.visioinnecktitude.domain.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,4 +76,20 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(BaseResponseStatus.SUCCESS));
     }
 
+    @PostMapping(value = "/modify/name")
+    @Operation(summary = "이름 변경 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "409", description = "중복된 이름입니다.", content = @Content),
+            @ApiResponse(responseCode = "409", description = "존재하지 않는 유저입니다.", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류입니다.", content = @Content)
+    })
+    public ResponseEntity<BaseResponse<LogInResponse>> modifyName(@RequestBody ModifyNameRequest modifyNameRequest) {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(loggedInUser.getName());
+        if(memberService.checkDuplicateName(modifyNameRequest.getName()))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new BaseResponse<>(BaseResponseStatus.EXIST_NICKNAME));
+        memberService.modifyName(memberId,modifyNameRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(BaseResponseStatus.SUCCESS));
+    }
 }

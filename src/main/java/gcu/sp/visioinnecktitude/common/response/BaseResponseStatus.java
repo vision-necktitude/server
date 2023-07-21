@@ -22,6 +22,7 @@ public enum BaseResponseStatus {
     EXIST_NICKNAME(false,HttpStatus.CONFLICT,"이미 존재하는 닉네임 입니다."),
     EXIST_MEMBER_ID(false,HttpStatus.CONFLICT,"이미 존재하는 유저 아이디 입니다."),
     NOT_EXIST_ID_OR_PASSWORD(false,HttpStatus.CONFLICT,"아이디 또는 비밀번호를 잘못 입력했습니다."),
+    NOT_EXIST_MEMBER(false,HttpStatus.CONFLICT,"존재하지 않는 유저입니다."),
     /**
      * 500 :  Database, Server 오류
      */
