@@ -4,6 +4,7 @@ import gcu.sp.visioinnecktitude.common.exceptions.BaseException;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.CreateMemberRequest;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.DuplicateNameRequest;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.LoginRequest;
+import gcu.sp.visioinnecktitude.domain.member.dto.request.ModifyNameRequest;
 import gcu.sp.visioinnecktitude.domain.member.entity.Member;
 import gcu.sp.visioinnecktitude.domain.member.entity.PasswordLogin;
 import gcu.sp.visioinnecktitude.domain.member.repository.MemberRepository;
@@ -63,8 +64,15 @@ public class MemberServiceImpl implements MemberService {
         return checkDuplicateName(duplicateNameRequest.getName());
     }
 
+    @Override
     public boolean checkDuplicateName(String name) {
         return memberRepository.existsByName(name);
+    }
+
+    @Override
+    public void modifyName(Long memberId, ModifyNameRequest modifyNameRequest) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(NOT_EXIST_MEMBER));
+        member.setName(modifyNameRequest.getName());
     }
 
     public boolean checkDuplicateId(String id) {
@@ -74,6 +82,7 @@ public class MemberServiceImpl implements MemberService {
     public boolean checkPassword(String password1, String password2) {
         return passwordEncoder.matches(password1, password2);
     }
+
     public String passwordEncode(String password) {
         return passwordEncoder.encode(password);
     }
