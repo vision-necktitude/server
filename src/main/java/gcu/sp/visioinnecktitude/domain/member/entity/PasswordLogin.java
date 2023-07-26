@@ -32,4 +32,8 @@ public class PasswordLogin extends BaseEntity {
     public void setMember(Member member) {
         this.member = member;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
