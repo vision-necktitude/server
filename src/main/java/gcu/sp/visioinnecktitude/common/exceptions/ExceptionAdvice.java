@@ -17,7 +17,7 @@ public class ExceptionAdvice {
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<BaseResponse<BaseResponseStatus>> BaseExceptionHandle(BaseException exception) {
         log.warn("BaseException. error message: {}", exception.getMessage());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new BaseResponse<>(exception.getStatus()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse<>(exception.getStatus()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,10 +1,7 @@
 package gcu.sp.visioinnecktitude.domain.member.service;
 
 import gcu.sp.visioinnecktitude.common.exceptions.BaseException;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.CreateMemberRequest;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.DuplicateNameRequest;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.LoginRequest;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.ModifyNameRequest;
+import gcu.sp.visioinnecktitude.domain.member.dto.request.*;
 import gcu.sp.visioinnecktitude.domain.member.entity.Member;
 import gcu.sp.visioinnecktitude.domain.member.entity.PasswordLogin;
 import gcu.sp.visioinnecktitude.domain.member.repository.MemberRepository;
@@ -73,6 +70,12 @@ public class MemberServiceImpl implements MemberService {
     public void modifyName(Long memberId, ModifyNameRequest modifyNameRequest) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(NOT_EXIST_MEMBER));
         member.setName(modifyNameRequest.getName());
+    }
+
+    @Override
+    public void modifyPassword(Long memberId, ModifyPasswordRequest modifyPasswordRequest) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(NOT_EXIST_MEMBER));
+        member.getPasswordLogin().setPassword(passwordEncode(modifyPasswordRequest.getPassword()));
     }
 
     public boolean checkDuplicateId(String id) {

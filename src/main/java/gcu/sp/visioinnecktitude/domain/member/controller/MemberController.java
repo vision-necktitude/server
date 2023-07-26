@@ -3,10 +3,7 @@ package gcu.sp.visioinnecktitude.domain.member.controller;
 import gcu.sp.visioinnecktitude.common.config.security.jwt.JwtTokenProvider;
 import gcu.sp.visioinnecktitude.common.response.BaseResponse;
 import gcu.sp.visioinnecktitude.common.response.BaseResponseStatus;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.CreateMemberRequest;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.DuplicateNameRequest;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.LoginRequest;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.ModifyNameRequest;
+import gcu.sp.visioinnecktitude.domain.member.dto.request.*;
 import gcu.sp.visioinnecktitude.domain.member.dto.response.LogInResponse;
 import gcu.sp.visioinnecktitude.domain.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -90,6 +87,19 @@ public class MemberController {
         if(memberService.checkDuplicateName(modifyNameRequest.getName()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new BaseResponse<>(BaseResponseStatus.EXIST_NICKNAME));
         memberService.modifyName(memberId,modifyNameRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(BaseResponseStatus.SUCCESS));
+    }
+    @PostMapping(value = "/modify/password")
+    @Operation(summary = "비밀번호 변경 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "409", description = "존재하지 않는 유저입니다.", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류입니다.", content = @Content)
+    })
+    public ResponseEntity<BaseResponse<LogInResponse>> modifyPassword(@RequestBody ModifyPasswordRequest modifyPasswordRequest) {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(loggedInUser.getName());
+        memberService.modifyPassword(memberId,modifyPasswordRequest);
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(BaseResponseStatus.SUCCESS));
     }
 }

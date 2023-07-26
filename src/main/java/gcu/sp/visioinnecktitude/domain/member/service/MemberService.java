@@ -1,9 +1,6 @@
 package gcu.sp.visioinnecktitude.domain.member.service;
 
-import gcu.sp.visioinnecktitude.domain.member.dto.request.CreateMemberRequest;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.DuplicateNameRequest;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.LoginRequest;
-import gcu.sp.visioinnecktitude.domain.member.dto.request.ModifyNameRequest;
+import gcu.sp.visioinnecktitude.domain.member.dto.request.*;
 
 public interface MemberService {
     void createMember(CreateMemberRequest createMemberRequest);
@@ -14,4 +11,6 @@ public interface MemberService {
     boolean checkDuplicateName(String name);
 
     void modifyName(Long memberId, ModifyNameRequest modifyNameRequest);
+
+    void modifyPassword(Long memberId, ModifyPasswordRequest modifyPasswordRequest);
 }
