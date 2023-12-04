@@ -5,6 +5,7 @@ import gcu.sp.visioinnecktitude.common.response.BaseResponse;
 import gcu.sp.visioinnecktitude.common.response.BaseResponseStatus;
 import gcu.sp.visioinnecktitude.domain.member.dto.request.*;
 import gcu.sp.visioinnecktitude.domain.member.dto.response.LogInResponse;
+import gcu.sp.visioinnecktitude.domain.member.dto.response.MemberPageResponse;
 import gcu.sp.visioinnecktitude.domain.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,10 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -101,5 +99,18 @@ public class MemberController {
         Long memberId = Long.parseLong(loggedInUser.getName());
         memberService.modifyPassword(memberId,modifyPasswordRequest);
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(BaseResponseStatus.SUCCESS));
+    }
+    @GetMapping(value = "/member-page")
+    @Operation(summary = "유저 페이지 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "409", description = "존재하지 않는 유저입니다.", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류입니다.", content = @Content)
+    })
+    public ResponseEntity<BaseResponse<MemberPageResponse>> getMemberPage() {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(loggedInUser.getName());
+        MemberPageResponse memberPageResponse = memberService.getMemberPage(memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(memberPageResponse));
     }
 }
