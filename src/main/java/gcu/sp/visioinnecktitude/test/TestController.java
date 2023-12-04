@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/test")
+@CrossOrigin
 public class TestController {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
