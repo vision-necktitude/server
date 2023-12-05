@@ -75,6 +75,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void modifyPassword(Long memberId, ModifyPasswordRequest modifyPasswordRequest) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(NOT_EXIST_MEMBER));
         member.getPasswordLogin().setPassword(passwordEncode(modifyPasswordRequest.getPassword()));
