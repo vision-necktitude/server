@@ -68,6 +68,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void modifyName(Long memberId, ModifyNameRequest modifyNameRequest) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(NOT_EXIST_MEMBER));
         member.setName(modifyNameRequest.getName());
